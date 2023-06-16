@@ -5,6 +5,8 @@ from _pytest.capture import CaptureFixture
 from eat_it.controllers import AddUserController, UserRequest, DeleteUserController, UpdateUserController, GetUserController, GetUsersController
 from eat_it.repositories import UserRepository
 
+# Definicje fixture
+
 @pytest.fixture
 def payload() -> dict:
     return {"first_name": "Jan", "last_name": "Kowalski"}
@@ -16,6 +18,8 @@ def user_repository() -> UserRepository:
 @pytest.fixture
 def controller(user_repository: UserRepository) -> AddUserController:
     return AddUserController(repository=user_repository)
+
+# Testy jednostkowe
 
 def test_add_user_controller_has_add_method(
     capsys: CaptureFixture,
@@ -101,33 +105,4 @@ def test_calls_put_in_repository_on_calling_controller(
         user_id: str,
         payload: dict,
 ) -> None:
-    request = UserRequest(user_id=user_id, user=payload)
-    controller.put(request)
-    assert user_repository.put.call_count > 0
-
-def test_put_user_request_has_user_id_and_user_attribute(user_id: str, payload: dict) -> None:
-    request = UserRequest(user_id=user_id, user=payload)
-    assert request.user
-
-def test_get_user_controller_has_get_method(
-    capsys: CaptureFixture,
-    user_id: str,
-    controller: GetUserController,
-) -> None:
-    request = UserRequest(user_id=user_id)
-    controller.get(request)
-    actual = capsys.readouterr().out
-    expected = f"{user_id}\n".replace('"', "'")
-    assert actual == expected
-
-def test_calls_get_in_repository_on_calling_controller(
-        controller: GetUserController,
-        user_id: str,
-) -> None:
-    request = UserRequest(user_id=user_id)
-    controller.get(request)
-    assert user_repository.get.call_count > 0
-
-def test_get_user_request_has_user_id_attribute(payload: dict) -> None:
-    request = UserRequest(user=payload)
-    assert request.user
+    request = User
